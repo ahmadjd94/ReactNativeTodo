@@ -1,5 +1,3 @@
-// create 
-
 import React from 'react';
 import  {View,Text,TextInput,Button,Alert, props, asyn} from 'react-native';
 
@@ -10,41 +8,16 @@ class App extends React.Component{
       domain:null,
       email:null,
       password:null,
-      todos:[]
+      todos:[],
+      cancel: false
     };
-    domain = null
-    email = null
-    password = null
+    // domain = null
+    // email = null
+    // password = null
     today = new Date();
-    url = "https://1fa7ee88.ngrok.io/auth/login"
-  
-//   _prepareLoginData (){
-//     return fetch(this.url, {
-//     method: 'POST',
-//     headers: {
-//       Accept: 'application/json',
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({
-//       domain: this.domain,
-//       email: this.email,
-//       password: this.password
-//     }),
-// });
-//   console.log(response)
-//   }
+    // url = "https://1fa7ee88.ngrok.io/auth/login"
 
 _prepareLoginData() {
-    // try {
-      // 
-      // Alert.alert("response",response)  
-      // let responseJson = response.json();
-      // Alert.alert("response",responseJson)
-    //   return responseJson.movies;
-    // } catch (error) {
-    //   console.error(error);
-    // }
-
 
     return fetch(this.url, {
       method: 'POST',
@@ -66,28 +39,33 @@ _prepareLoginData() {
       console.error(error);
     });
   }
-  handleText =()=>{
-    this.setState({todo:this.state.todos.push(this.state.text)})
+  clearText = () =>{
     this.setState({text:""})
+    
   }
-  changeTodo= () =>{
+  handleText(cancel=false){
+
+    if (cancel===false){
+      this.setState({todo:this.state.todos.push(this.state.text)})
+      }
+    this.clearText()
+  }
+  changeTodo=()=>{
     if (this.state.text != ""){
       if (this.state.todos.includes(this.state.text)){
         Alert.alert("warning","the text you submitted is already in the list",
         [
-          {text: 'Cancel', onPress: () => this.setState({cancel:true})},
-          {text: 'OK', onPress: () => this.setState({cancel:false})}
-        ],)
-      
-        if (!this.state.cancel){
-          this.handleText()
-          }
+          {text: 'Cancel', onPress: () => this.handleText(true)},
+          {text: 'OK', onPress: () => this.handleText(false)}
+        ])
       }
-      else
-      this.handleText()
+      else{
+        this.handleText()
+      }
+        
     }
     else{
-      Alert.alert("error", "enter a valid todo text")
+      Alert.alert("error", "Enter a text into the box before proceeding")
     }
   }
   renderTodos = () =>{
@@ -113,10 +91,6 @@ _prepareLoginData() {
 
         
         <Button  title="Login" onPress={this.changeTodo}/>
-        {/* this.state.todos.forEach(function (value) {
-            <Text> POSRocket © {value}</Text>
-        
-        }); */}
 
         {this.renderTodos()}
         <Text> POSRocket © {this.state.todos}</Text>
@@ -128,9 +102,6 @@ _prepareLoginData() {
   }
 }
 
-// create stuff
-
-// export Stuff
 
 const styles = {
   viewStyle:{
