@@ -1,5 +1,6 @@
 import React from 'react';
-import  {View,Text,TextInput,Button,Alert, props, asyn} from 'react-native';
+import  {View,Text,TextInput,Button,Alert, props, TouchableOpacity} from 'react-native';
+import { WebView } from 'react-native-gesture-handler';
 
 
 class App extends React.Component{
@@ -11,11 +12,8 @@ class App extends React.Component{
       todos:[],
       cancel: false
     };
-    // domain = null
-    // email = null
-    // password = null
     today = new Date();
-    // url = "https://1fa7ee88.ngrok.io/auth/login"
+
 
 _prepareLoginData() {
 
@@ -68,35 +66,49 @@ _prepareLoginData() {
       Alert.alert("error", "Enter a text into the box before proceeding")
     }
   }
+
+  deleteTodo=(t)=>{
+    var arr = this.state.todos
+    // arr = arr.splice(arr.indexOf(t),1)
+    this.setState({todos:arr.filter(item => !t)})
+  }
   renderTodos = () =>{
     return this.state.todos.map(t=>{
       return(
-        <Text key={this.state.todos.indexOf(t)}> {t} </Text>
+        <TouchableOpacity key={this.state.todos.indexOf(t)}
+        
+        style={styles.TodoStyle}>
+        <Text onPress={()=>{this.deleteTodo(t)}}>
+        {t}
+        </Text>
+        </TouchableOpacity>
       )
     })
   }
   
   render(){
     return (
-      <View style={styles.viewStyle}>
-        
+      <View style={styles.mainView}>
+        <View style={styles.viewStyle}>
+          
 
-        <Text> text</Text>
-        <TextInput style={styles.inputStyle}
-        placeholder="Enter Todo"
-        
-        onChangeText={(text)=>this.setState({text:text})}
-        value = {this.state.text}
-        />
+          <Text style = {styles.titleStyle}>Todo List</Text>
+          <TextInput style={styles.inputStyle}
+          placeholder="Enter Todo"
+          
+          onChangeText={(text)=>this.setState({text:text})}
+          value = {this.state.text}
+          />
 
-        
-        <Button  title="Login" onPress={this.changeTodo}/>
+          
+          <Button  title="Add Todo" onPress={this.changeTodo}/>
 
-        {this.renderTodos()}
-        <Text> POSRocket © {this.state.todos}</Text>
+          <View style={styles.todoList}>
+          {this.renderTodos()}
+          </View>
+        <Text> Ahmad © {this.today.getFullYear()}</Text>
 
-      <Text> POSRocket © {this.today.getFullYear()}</Text>
-
+        </View>
       </View>
       )
   }
@@ -104,17 +116,38 @@ _prepareLoginData() {
 
 
 const styles = {
-  viewStyle:{
+  mainView:{
     flex:1,
+    backgroundColor:"#CEEAF7"
+
+  },
+  viewStyle:{
+    marginTop:50,
+    alignItems: 'center',
+    justifyContent:'center'
+  },
+  todoList:{
+    marginTop:20,
     alignItems: 'center',
     justifyContent:'center'
   },
   inputStyle:{
     height: 50,
     width:100,
-    borderColor:"blue",
-    borderWidth:1
+    marginBottom:30
 
+  },
+  TodoStyle:{
+    height: 50,
+    width:100,
+    alignItems: 'center',
+    justifyContent:'center'
+  },
+  titleStyle:{
+    fontWeight:"bold",
+    color:"#35383D",
+    fontSize:30,
+    marginBottom:30
   }
 }
 
